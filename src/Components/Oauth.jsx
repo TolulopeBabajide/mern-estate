@@ -19,7 +19,7 @@ export default function Oauth(){
 
       const result = await signInWithPopup(auth,provider);
     
-      const res = await fetch('http://localhost:3000/api/auth/google',{
+      const res = await fetch('/api/auth/google',{
         method:'POST',
         headers:{
           "Content-Type":"application/json"
@@ -34,7 +34,7 @@ export default function Oauth(){
         console.log(result)
       const data=  await res.json();
       dispatch(signInSuccess(data));
-      navigate('/home');
+      navigate('/');
 
 
     } catch (error) {
