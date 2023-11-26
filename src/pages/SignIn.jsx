@@ -1,59 +1,66 @@
-import React from 'react'
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {signInStart,signInSuccess,signInFailure} from "../redux/user/userSlice"
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import Oauth from '../Components/Oauth';
 
-
-
 const SignIn = () => {
+  // State to manage form data
+  const [formData, setFormData] = useState({});
 
-    const [formData, setFormData] = useState({});
-    const {loading, error} = useSelector((state)=>state.user);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+  // Select user-related data from Redux store
+  const { loading, error } = useSelector((state) => state.user);
 
-    const handleChange = (e) => {
-        setFormData({ 
-            ...formData, 
-            [e.target.id]: e.target.value });
-    };
+  // Hook to navigate to other pages
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
+  // Redux dispatch hook
+  const dispatch = useDispatch();
 
-        try {
+  // Function to handle changes in input fields
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
 
-            dispatch(signInStart());
-    
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            const res = await fetch('/api/auth/signin', 
-            {
-                method: 'POST', 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData),       
-            });
-            const data = await res.json();
-            console.log(data);
-            if (data.success===false){
-                dispatch(signInFailure(data.message));
-                return; 
-            }
+    try {
+      // Dispatch action to start the sign-in process
+      dispatch(signInStart());
 
-            dispatch(signInSuccess(data));
-            navigate('/');
-            
-            
+      // Send a request to sign in the user
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-        }catch(error){
-            dispatch(signInFailure(error.message));
-        }; 
+      // Parse the response
+      const data = await res.json();
+      console.log(data);
 
-        
-    } 
+      // If the sign-in is unsuccessful, dispatch failure action
+      if (data.success === false) {
+        dispatch(signInFailure(data.message));
+        return;
+      }
+
+      // Dispatch success action and navigate to the home page
+      dispatch(signInSuccess(data));
+      navigate('/');
+    } catch (error) {
+      // Dispatch failure action if an error occurs
+      dispatch(signInFailure(error.message));
+    }
+  };
     
 
 

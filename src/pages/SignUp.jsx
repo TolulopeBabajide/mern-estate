@@ -1,60 +1,67 @@
-import React from 'react'
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Oauth from '../Components/Oauth';
 
 const SignUp = () => {
+  // State to manage form data
+  const [formData, setFormData] = useState({});
 
-    const [formData, setFormData] = useState({});
-    const [error,setError ] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate(); 
+  // State to manage error
+  const [error, setError] = useState(null);
 
-    const handleChange = (e) => {
-        setFormData({ 
-            ...formData, 
-            [e.target.id]: e.target.value });
-    };
+  // State to manage loading state during form submission
+  const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e)=>{
-        // debugger;
-        e.preventDefault();
+  // Hook to navigate to other pages
+  const navigate = useNavigate();
 
-        try {
+  // Function to handle changes in input fields
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
 
-            setLoading(true);
-    
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            const res = await fetch('/api/auth/signup', 
-            {
-                method: 'POST', 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData),       
-            });
-            const data = await res.json();
-            console.log(data);
-            if (data.success===false){
-                setError(data.message)
-                setLoading(false);
-                return; 
-            }
+    try {
+      // Set loading state to true
+      setLoading(true);
 
-            setLoading(false);
-            setError(null);
-            navigate('/signin');
-            
-            
+      // Send a request to sign up the user
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-        }catch(error){
-            setError(error.message)
-            setLoading(false);
-        }; 
+      // Parse the response
+      const data = await res.json();
+      console.log(data);
 
-        
-    } 
-    
+      // If sign-up is unsuccessful, set error and stop loading
+      if (data.success === false) {
+        setError(data.message);
+        setLoading(false);
+        return;
+      }
+
+      // Reset error, stop loading, and navigate to the sign-in page
+      setError(null);
+      setLoading(false);
+      navigate('/signin');
+    } catch (error) {
+      // Set error and stop loading if an error occurs
+      setError(error.message);
+      setLoading(false);
+    }
+  };
 
 
   return (
