@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice';
+import { updateUserStart, updateUserSuccess, updateUserFailure,
+          deleteUserStart, deleteUserSuccess, deleteUserFailure ,
+          signOutStart, signOutSuccess, signOutFailure} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 const Profile = () => {
@@ -24,6 +26,7 @@ const Profile = () => {
     if (file) {
       handleFileUpload(file);
     }
+    // eslint-disable-next-line 
   }, [file]);
 
   // Function to handle file upload using Firebase Storage
@@ -91,6 +94,47 @@ const Profile = () => {
     }
   };
 
+  //function to handle Delete User functionality
+  const handleDeleteUser = async () =>{
+    try {
+      // Dispatch action to start the delete process
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`,{
+        method:'DELETE',
+      });
+      // Parse the response
+      const data = await res.json();
+      // If the deletion is unsuccessful, dispatch failure action
+      if(data.success===false){
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data)); 
+      
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
+  }
+
+
+  // function to handle signout functionalities
+  const handleSignOut = async () =>{
+    try{
+      dispatch(signOutStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if(data.success===false){
+        dispatch(signOutFailure(data.message))
+        return;
+      }
+      dispatch(signOutSuccess());
+
+    } catch(error){
+      dispatch(signOutFailure(error.message));
+    }
+  }
+
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Profile</h1>
@@ -118,8 +162,8 @@ const Profile = () => {
       </form>
 
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete account</span>
-        <span className='text-red-700 cursor-pointer'>Sign out</span>
+        <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete account</span>
+        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
 
             <p className='text-red-700 mt-5 '>{error ? error : " "}</p>

@@ -39,6 +39,32 @@ const userSlice = createSlice({
       state.error = action.payload;        // Set the error on update failure
       state.loading = false;               // Reset loading to false
     },
+
+    //Actions related to deleting user account
+    deleteUserStart: (state) => {
+      state.loading = true;
+    },
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+    deleteUserFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    signOutStart: (state)=>{
+      state.loading=true;
+    },
+    signOutSuccess:(state)=> {
+      state.currentUser =null;
+      state.loading=false;
+      state.error=null;
+    },
+    signOutFailure:(state, action)=>{
+      state.error=action.payload;
+      state.loading=false;
+    }
   },
 });
 
@@ -50,6 +76,12 @@ export const {
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
 } = userSlice.actions;
 
 // Export the user reducer to be used in the Redux store
