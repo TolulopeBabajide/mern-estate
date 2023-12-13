@@ -10,6 +10,7 @@ import PrivateRoute from './Components/PrivateRoute';
 import AdminSignIn from './admin/AdminSignin';
 import PrivateAdmin from './admin/PrivateAdmin';
 import AdminProfile from './admin/AdminProfile';
+import CreateListing from './admin/CreateListing';
 
 const App = () => {
   return (
@@ -31,7 +32,8 @@ const App = () => {
         <Route element={<SignUp />} path="/signUp" />
         <Route element={<AdminSignIn/>} path="/adminpanel/signin"/>
         <Route element={<PrivateAdmin/>}>
-          <Route element={<AdminProfile />} path='adminpanel/admin/profile' />
+          <Route element={<AdminProfile />} path='/adminpanel/admin/profile' />
+          <Route element={<CreateListing />} path='/adminpanel/create-listing' />
         </Route>
       </Routes>
     </BrowserRouter>

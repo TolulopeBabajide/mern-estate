@@ -7,7 +7,7 @@ import { updateUserStart, updateUserSuccess, updateUserFailure,
           deleteUserStart, deleteUserSuccess, deleteUserFailure ,
           signOutStart, signOutSuccess, signOutFailure} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const AdminProfile = () => {
   // Select user-related data from Redux store
@@ -162,6 +162,9 @@ const AdminProfile = () => {
         <button disabled={loading} className='uppercase hover:opacity-95 bg-slate-700 text-white rounded-lg p-3 disabled:opacity-80'>
           {loading ? "Loading..." : "Update"}
         </button>
+
+        <Link to='/adminpanel/create-listing' className='bg-green-700 rounded-lg uppercase text-center hover:opacity-95 text-white p-3' >Create Listing</Link>
+
       </form>
 
       <div className='flex justify-between mt-5'>
