@@ -8,6 +8,8 @@ import SignUp from './pages/SignUp';
 import Header from './Components/Header';
 import PrivateRoute from './Components/PrivateRoute';
 import AdminSignIn from './admin/AdminSignin';
+import PrivateAdmin from './admin/PrivateAdmin';
+import AdminProfile from './admin/AdminProfile';
 
 const App = () => {
   return (
@@ -28,6 +30,9 @@ const App = () => {
         {/* Route for the SignUp page */}
         <Route element={<SignUp />} path="/signUp" />
         <Route element={<AdminSignIn/>} path="/adminpanel/signin"/>
+        <Route element={<PrivateAdmin/>}>
+          <Route element={<AdminProfile />} path='adminpanel/admin/profile' />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

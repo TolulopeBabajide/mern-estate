@@ -37,15 +37,24 @@ const Header = () => {
         </Link>
 
         {/* Profile Link or Sign In Link */}
-        <Link to='/profile'>
-          {currentUser ? (
-            // Display User Avatar if logged in
-            <img src={currentUser.avatar} className='rounded-full h-7 w-7 object-cover' alt='profile' />
-          ) : (
-            // Display Sign In Link if not logged in
-            <li className='sm:inline text-slate-700 hover:underline'>Sign In</li>
-          )}
-        </Link>
+        {!currentUser ? (
+                    // Display Sign In Link if not logged in
+                    <Link to='/signin'>
+                        <li className='sm:inline text-slate-700 hover:underline'>Sign In</li>
+                    </Link>
+                ) : currentUser && currentUser.role === 'admin' ? (
+                    <Link to='adminpanel/admin/profile'>
+                        {/* Display Admin Avatar if logged in as an admin */}
+                        <img src={currentUser.avatar} className='rounded-full h-7 w-7 object-cover' alt='profile' />
+                    </Link>
+                ) : (
+                    <Link to='/profile'>
+                        {/* Display User Avatar if logged in as a regular user */}
+                        <img src={currentUser.avatar} className='rounded-full h-7 w-7 object-cover' alt='profile' />
+                    </Link>
+                )}
+
+                
       </ul>
     </header>
   );
