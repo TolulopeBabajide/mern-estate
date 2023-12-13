@@ -7,6 +7,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Header from './Components/Header';
 import PrivateRoute from './Components/PrivateRoute';
+import AdminSignIn from './admin/AdminSignin';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route element={<SignIn />} path="/signIn" />
         {/* Route for the SignUp page */}
         <Route element={<SignUp />} path="/signUp" />
+        <Route element={<AdminSignIn/>} path="/adminpanel/signin"/>
       </Routes>
     </BrowserRouter>
   );
